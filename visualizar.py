@@ -284,11 +284,17 @@ def ejecutar_busqueda(arreglo: list[int], objetivo: int) -> None:
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    import os
+
+    # ===============================
+    # CREAR CARPETA PARA GRÁFICAS
+    # ===============================
+    os.makedirs("graficas", exist_ok=True)
 
     # ===============================
     # DEMOSTRACIÓN NORMAL
     # ===============================
-    ejecutar_fibonacci(6)
+    ejecutar_fibonacci(10)
 
     print("\n" + "#" * 70 + "\n")
 
@@ -346,23 +352,27 @@ if __name__ == "__main__":
     # GRÁFICA FIBONACCI
     # ===============================
     plt.figure()
-    plt.plot(valores_n, llamadas_sin_memoria, label="Sin memoria")
-    plt.plot(valores_n, llamadas_con_memoria, label="Con memoria")
+    plt.plot(valores_n, llamadas_sin_memoria, label="Sin memoización")
+    plt.plot(valores_n, llamadas_con_memoria, label="Con memoización")
     plt.xlabel("n")
     plt.ylabel("Número de llamadas")
-    plt.title("Fibonacci: con vs sin memoria")
+    plt.title("Fibonacci: con vs sin memoización")
     plt.legend()
     plt.grid()
+
+    plt.savefig("graficas/fibonacci.png", dpi=300)  # 👈 guardar imagen
     plt.show()
 
     # ===============================
     # GRÁFICA BÚSQUEDA BINARIA
     # ===============================
     plt.figure()
-    plt.plot(valores_n, llamadas_binaria, label="Búsqueda binaria")
+    plt.plot(valores_n, llamadas_binaria, label="Búsqueda binaria (peor caso)")
     plt.xlabel("Tamaño del arreglo (n)")
     plt.ylabel("Número de llamadas")
-    plt.title("Búsqueda binaria")
+    plt.title("Búsqueda binaria (peor caso)")
     plt.legend()
     plt.grid()
+
+    plt.savefig("graficas/binaria.png", dpi=300)  # 👈 guardar imagen
     plt.show()
