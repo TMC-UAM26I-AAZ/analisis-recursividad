@@ -283,10 +283,86 @@ def ejecutar_busqueda(arreglo: list[int], objetivo: int) -> None:
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    # ===============================
+    # DEMOSTRACIÓN NORMAL
+    # ===============================
     ejecutar_fibonacci(6)
 
     print("\n" + "#" * 70 + "\n")
 
-    arreglo_prueba = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    arreglo_prueba = list(range(1, 21))
     objetivo_prueba = 6
     ejecutar_busqueda(arreglo_prueba, objetivo_prueba)
+
+    # ===============================
+    # RECOLECCIÓN DE DATOS
+    # ===============================
+    valores_n: list[int] = []
+    llamadas_sin_memoria: list[int] = []
+    llamadas_con_memoria: list[int] = []
+    llamadas_binaria: list[int] = []
+
+    # Fibonacci (cuidado: sin memoria crece MUY rápido)
+    for i in range(1, 21):
+        _, _, sin_mem = fibonacci_recursivo(i)
+        _, _, con_mem = fibonacci_recursivo_memoria(i)
+
+        valores_n.append(i)
+        llamadas_sin_memoria.append(sin_mem)
+        llamadas_con_memoria.append(con_mem)
+
+    # Búsqueda binaria (peor caso: elemento no está)
+    for n in valores_n:
+        arreglo = list(range(n))
+        objetivo = -1  # no existe → peor caso
+
+        _, _, llamadas = busqueda_binaria_arbol(
+            arreglo,
+            objetivo,
+            0,
+            len(arreglo) - 1
+        )
+
+        llamadas_binaria.append(llamadas)
+
+    # ===============================
+    # TABLA DE RESULTADOS
+    # ===============================
+    print("\nTABLA DE RESULTADOS")
+    print(" n | sin memo | con memo | binaria")
+    print("-" * 45)
+
+    for n, sin_m, con_m, bin_b in zip(
+        valores_n,
+        llamadas_sin_memoria,
+        llamadas_con_memoria,
+        llamadas_binaria
+    ):
+        print(f"{n:>2} | {sin_m:>8} | {con_m:>8} | {bin_b:>7}")
+
+    # ===============================
+    # GRÁFICA FIBONACCI
+    # ===============================
+    plt.figure()
+    plt.plot(valores_n, llamadas_sin_memoria, label="Sin memoria")
+    plt.plot(valores_n, llamadas_con_memoria, label="Con memoria")
+    plt.xlabel("n")
+    plt.ylabel("Número de llamadas")
+    plt.title("Fibonacci: con vs sin memoria")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    # ===============================
+    # GRÁFICA BÚSQUEDA BINARIA
+    # ===============================
+    plt.figure()
+    plt.plot(valores_n, llamadas_binaria, label="Búsqueda binaria")
+    plt.xlabel("Tamaño del arreglo (n)")
+    plt.ylabel("Número de llamadas")
+    plt.title("Búsqueda binaria")
+    plt.legend()
+    plt.grid()
+    plt.show()
